@@ -1,19 +1,28 @@
 {
   "name": "express-crash-course",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
-    "devStart": "nodemon server.js"
+    "devStart": "nodemon server.js",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "ejs": "^3.1.6",
-    "express": "^4.17.1"
+    "express": "^4.18.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.12"
-  }
+    "nodemon": "^2.0.20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MaiMMM/express-crash-course.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MaiMMM/express-crash-course/issues"
+  },
+  "homepage": "https://github.com/MaiMMM/express-crash-course#readme",
+  "description": ""
 }

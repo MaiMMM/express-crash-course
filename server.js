@@ -1,3 +1,7 @@
+// npm init -y
+// npm i express
+// npm i --save-dev nodemon
+// npm run devStart
 const express = require("express")
 const app = express()
 
