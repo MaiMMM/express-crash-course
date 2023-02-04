@@ -11,8 +11,12 @@ app.use(express.json())
 
 app.set("view engine", "ejs")
 
+// users router
 const userRouter = require("./routes/users")
-
 app.use("/users", userRouter)
 
-app.listen(3000)
+//violetCube router
+const violetCubeRouter = require("./routes/violetCube")
+app.use("/violetCube", violetCubeRouter)
+
+app.listen(3001)
