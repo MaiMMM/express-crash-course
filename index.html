@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+
+<script>
+    const DEX = "DEX: +12%"
+    const INT = "INT: +12%"
+    const LUK = "LUK: +12%"
+    const STR = "STR: +12%"
+    const HP = "MAX HP: +12%"
+    const MP = "MAX MP: +12%"
+    const DEF = "DEF: +12%"
+    const ALL = "All Stats +9%"
+    const IG20 = "10% chance to ignore 20% of monster damage dealt"
+    const IG40 = "10% chance to ignore 40% of monster damage dealt"
+    const CD1S = "Skill Cooldown: -1 sec (-5% for under 10 sec, minimum cooldown of 5 sec)"
+    const CD2S = "Skill Cooldown: -2 sec (-5% for under 10 sec, minimum cooldown of 5 sec)"
+    const INVI3S = "Invisible +3 more sec, when hit"
+    const INVI2S = "Invisible +2 more sec, when hit"
+    const INVI4P = "4% chance to become invincible for 7 seconds when attacked"
+    const INVI2P = "2% chance to become invincible for 7 seconds when attacked"
+    const CD = "Critical Damage: +8%"
+    const MP15 = "Skill MP Cost: -15%"
+    const MP30 = "Skill MP Cost: -30%"
+    const MESO = "Mesos Obtained: +20%"
+    const DROP = "Item Drop Rate: +20%"
+    const ATT = "ATT: +12%"
+    const MATT = "Magic ATT: +12%"
+    const ATTLV = "ATT per 10 Character Levels: +1"
+    const MATTLV = "M.ATT per 10 Character Levels: +1"
+    const IED35 = "Ignore Enemy DEF: +35%"
+    const IED40 = "Ignore Enemy DEF: +40%"
+    const DMG = "Damage: +12%"
+    const CRIT = "critical rate: +12% "
+    const BOSS30 = "Boss Monster Damage: +30%"
+    const BOSS35 = "Boss Monster Damage: +35%"
+    const BOSS40 ="Boss Monster Damage: +40%"
+    const DEX9 = "DEX: +9%"
+    const INT9 = "INT: +9%"
+    const LUK9 = "LUK: +9%"
+    const STR9 = "STR: +9%"
+    const HP9 = "MAX HP: +9%"
+    const MP9 = "MAX MP: +9%"
+    const DEF9 = "DEF: +9%"
+    const ALL6 = "All Stats +6%"
+    const IG20U = "5% chance to ignore 20% of monster damage dealt"
+    const IG40U = "5% chance to ignore 40% of monster damage dealt"
+    const RECOV = "HP Recovery Items and Skills: +30%"
+    const REFLECT50 = "Reflect 50% damage at a chance"
+    const REFLECT70 = "Reflect 70% damage at a chance"
+    const STR1 = "STR per 10 Character Level: +1"
+    const DEX1 = "DEX per 10 Character Level: +1"
+    const INT1 = "INT per 10 Character Level: +1"
+    const LUK1 = "LUK per 10 Character Level: +1"
+    const ATT9 = "ATT: +9%"
+    const MATT9 = "Magic ATT: +9%"
+    const DMG9 = "Damage: +9%"
+    const CRIT9 = "critical rate: +9% "
+    const IED30 = "Ignore Enemy DEF: +30%"
+
+
+
+    //testString("dex","Dex: +9%") = 9
+    //testString("dex","Dex: +12%") = 12
+    //testString("dex","All Stats: +9%") = 9*1.15
+    //testString("dex","All stats: +6%") = 6*1.15
+    //testString("dex","DEX per 10 Character Level: +1") = 0
+
+    
+
+
+
+    //testString  
+    function testString(desiredStat, rolledStat){
+        desiredStat = desiredStat.toLowerCase();
+        rolledStat = rolledStat.toLowerCase();
+
+        // dex, int , str, luk
+        // console.log(testString("dex","Dex: +12%")) = 12
+        // console.log(testString("dex","DEX per 10 Character Level: +1")) = 0
+        // console.log(testString("dex","All Stats: +9%")) = 9*1.15
+        // console.log(testString("dex","All Stats: +6%")) = 6*1.15
+        if(desiredStat === "dex" || desiredStat === "str" || 
+        desiredStat === "int" || desiredStat === "luk"){
+            if(rolledStat.includes(desiredStat) && !rolledStat.includes("per")){
+                return(rolledStat.replace(/\D+/g, ''));
+            }
+            else if(rolledStat.includes("all stats")){
+                return(rolledStat.replace(/\D+/g, '') * 1.15);
+            }
+            else{
+                return 0;
+            }
+        }
+
+        //all stat
+        //console.log(testString("allStat","All Stats: +6%")) = 6
+        if(desiredStat === "allstat"){
+            if(rolledStat.includes("all stats")){
+                return(rolledStat.replace(/\D+/g, ''));
+            }
+            else{
+                return 0;
+            }
+        }
+
+
+        //HP
+        //console.log(testString("HP","MAX HP: +9%")) = 9
+        //console.log(testString("HP","MAX HP: +12%")) = 12
+        //console.log(testString("HP","HP Recovery Items and Skills: +30%")) = 0
+        if(desiredStat === "hp"){
+            if(rolledStat.includes("max hp")){
+                return(rolledStat.replace(/\D+/g, ''));
+            }
+            else{
+                return 0;
+            }
+        }
+
+
+        //Critical Damage
+        //console.log(testString("criticalDamage","Critical Damage: +8%")) = 8
+        if(desiredStat === "criticaldamage"){
+            if(rolledStat.includes("critical damage")){
+                return(rolledStat.replace(/\D+/g, ''));
+            }
+            else{
+                return 0;
+            }
+        }
+
+
+        //Cool Down
+        //console.log(parseInt(testString("coolDown","Skill MP Cost: -15%"))) = 0
+        //console.log(testString("coolDown","Skill Cooldown: -1 sec (-5% for under 10 sec, minimum cooldown of 5 sec)")) = 1
+        if(desiredStat === "cooldown"){
+            if(rolledStat.includes("skill cooldown")){
+                return(('' + rolledStat.replace(/\D+/g, ''))[0]);
+            }
+            else{
+                return 0;
+            }
+        }
+
+
+        //att & matt
+        //console.log(testString("ATT","ATT: +12%")) = 12
+        //console.log(testString("ATT","ATT per 10 Character Levels: +1")) = 0
+        //console.log(testString("mATT","Magic ATT: +9%")) = 9
+        if(desiredStat = "att"){
+            if(rolledStat.includes("att: +12%")){return 12;}
+            else if(rolledStat.includes("att: +9%")){return 9;}
+            else{return 0;}
+        }
+
+        if(desiredStat = "matt"){
+            if(rolledStat.includes("magic att: +12%")){return 12;}
+            else if(rolledStat.includes("magic att: +9%")){return 9;}
+            else{return 0;}
+        }
+
+    }
+
+</script>
+</html>
