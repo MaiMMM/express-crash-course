@@ -1,7 +1,7 @@
 const { Template } = require("ejs")
 const express = require("express")
 const router = express.Router()
-
+let hasSent = false;
 // router.use(logger)
 // http://localhost:3001/violetCube/id?type=glove&stat=CRIT&num=36&numOfTry=10000
 // **************************************************************************
@@ -88,10 +88,13 @@ router
     console.log(stat)
     console.log(num)
     console.log(numOfTry)
-    let response = main(type,stat,num,numOfTry,res); //main function
 
+    let response = main(type,stat,num,numOfTry,res); //main function
     // res.setHeader('Content-Type', 'application/json');
-    res.send(response);
+    if(!hasSent){res.send(response);}
+
+
+
   })
 
 
@@ -386,6 +389,7 @@ function checkQueryValidity(typeOfEquip,stat,desiredNum,numOfTry,res){
     else if(desiredNum <= 0 || desiredNum > 36){res.status(403).json({code:403, message:"disired stat either too high or too low" }); isValid = false}
     else if(numOfTry < 100 || numOfTry > 100000){res.status(403).json({code:403, message:"too many tries" }); isValid = false}
     else if(!supportedStat.includes(stat)){res.status(403).json({code:403, message:"stat doesn't exist, please double check your query",supported_stat : supportedStat}); isValid = false}
+    hasSent = !isValid;
     return isValid;
 }
 
@@ -394,7 +398,7 @@ function main(typeOfEquip,stat,desiredNum,numOfTry,res){
     let isValid = checkQueryValidity(typeOfEquip,stat,desiredNum,numOfTry,res);
     let numOfSuccess = 0
 
-   
+
     if(isValid){
 
         for(let i = 0; i < numOfTry; i++){
