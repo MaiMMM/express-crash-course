@@ -1,3 +1,4 @@
+const { Template } = require("ejs")
 const express = require("express")
 const router = express.Router()
 
@@ -12,6 +13,7 @@ router.get("/", (req, res) => {
 
 //**************************************************************************
 var equip_list = ["glove","top", "buttom","ring","hat","shoe","face","eye","weapon","badge","emblem","belt","earring","heart","pendant","secondary","shoulder","cape"]
+const supportedStat = ["DEX","INT","LUK","STR","allStat","HP","critialDamage","coolDown","ATT","MATT"];
 const DEX = "DEX: +12%"
 const INT = "INT: +12%"
 const LUK = "LUK: +12%"
@@ -81,12 +83,19 @@ router
   .get((req, res) => {
     // console.log(req.user)
     var type = req.query.type; var stat = req.query.stat; var num = req.query.num; var numOfTry = req.query.numOfTry;
-    // main(type,stat,num,numOfTry,res); //main function
-    res.send(`Get User With ID ${req.params}`)
+
+    console.log(type)
+    console.log(stat)
+    console.log(num)
+    console.log(numOfTry)
+    let response = main(type,stat,num,numOfTry,res); //main function
+
+    // res.setHeader('Content-Type', 'application/json');
+    res.send(response);
   })
 
 
-//-----------------------------------Functions for rolling stat----------------------------------------------------
+//-----------------------------------Functions for rolling stat-------------------------------------------------------------------------------------
 // Helper function for prime_random_select() and unprime_random_select()
 function pickfromarr(lib, pos){
     if(lib.length !== pos.length){console.log("lib pos length different");console.log(lib.length);console.log(pos.length)}
@@ -246,11 +255,102 @@ function runOnce(typeOfEquip, primeRate){
 
 
 //-------------------------------------functions for calculating if a roll passes the desired stat--------------------------------------------------
-// example: calculatedMatchingStat("STR: + 12%", "STR") = 12
-// example: calculatedMatchingStat("STR: + 12%", "DEX") = 0
-function calculateMatchingStat(statLine, desiredStat){
-    ;
+// console.log(testString("dex","Dex: +12%")) = 12
+// console.log(testString("dex","DEX per 10 Character Level: +1")) = 0
+// console.log(testString("dex","All Stats: +9%")) = 9*1.15
+// console.log(testString("dex","All Stats: +6%")) = 6*1.15
+function testString(desiredStat, rolledStat){
+    desiredStat = desiredStat.toLowerCase();
+    rolledStat = rolledStat.toLowerCase();
+
+    // dex, int , str, luk
+    // console.log(testString("dex","Dex: +12%")) = 12
+    // console.log(testString("dex","DEX per 10 Character Level: +1")) = 0
+    // console.log(testString("dex","All Stats: +9%")) = 9*1.15
+    // console.log(testString("dex","All Stats: +6%")) = 6*1.15
+    if(desiredStat === "dex" || desiredStat === "str" || 
+    desiredStat === "int" || desiredStat === "luk"){
+        if(rolledStat.includes(desiredStat) && !rolledStat.includes("per")){
+            return(rolledStat.replace(/\D+/g, ''));
+        }
+        else if(rolledStat.includes("all stats")){
+            return(rolledStat.replace(/\D+/g, '') * 1.15);
+        }
+        else{
+            return 0;
+        }
+    }
+
+    //all stat
+    //console.log(testString("allStat","All Stats: +6%")) = 6
+    if(desiredStat === "allstat"){
+        if(rolledStat.includes("all stats")){
+            return(rolledStat.replace(/\D+/g, ''));
+        }
+        else{
+            return 0;
+        }
+    }
+
+
+    //HP
+    //console.log(testString("HP","MAX HP: +9%")) = 9
+    //console.log(testString("HP","MAX HP: +12%")) = 12
+    //console.log(testString("HP","HP Recovery Items and Skills: +30%")) = 0
+    if(desiredStat === "hp"){
+        if(rolledStat.includes("max hp")){
+            return(rolledStat.replace(/\D+/g, ''));
+        }
+        else{
+            return 0;
+        }
+    }
+
+
+    //Critical Damage
+    //console.log(testString("criticalDamage","Critical Damage: +8%")) = 8
+    if(desiredStat === "criticaldamage"){
+        if(rolledStat.includes("critical damage")){
+            return(rolledStat.replace(/\D+/g, ''));
+        }
+        else{
+            return 0;
+        }
+    }
+
+
+    //Cool Down
+    //console.log(parseInt(testString("coolDown","Skill MP Cost: -15%"))) = 0
+    //console.log(testString("coolDown","Skill Cooldown: -1 sec (-5% for under 10 sec, minimum cooldown of 5 sec)")) = 1
+    if(desiredStat === "cooldown"){
+        if(rolledStat.includes("skill cooldown")){
+            return(('' + rolledStat.replace(/\D+/g, ''))[0]);
+        }
+        else{
+            return 0;
+        }
+    }
+
+
+    //att & matt
+    //console.log(testString("ATT","ATT: +12%")) = 12
+    //console.log(testString("ATT","ATT per 10 Character Levels: +1")) = 0
+    //console.log(testString("mATT","Magic ATT: +9%")) = 9
+    if(desiredStat = "att"){
+        if(rolledStat.includes("att: +12%") && !rolledStat.includes("magic att: +12%")){return 12;}
+        else if(rolledStat.includes("att: +9%") && !rolledStat.includes("magic att: +9%")){return 9;}
+        else{return 0;}
+    }
+
+    if(desiredStat = "matt"){
+        console.log("here1");
+        if(rolledStat.includes("magic att: +12%")){return 12;}
+        else if(rolledStat.includes("magic att: +9%")){return 9;}
+        else{return 0;}
+    }
+
 }
+
 
 // input: desiredStat,desiredTotalStat, a list of stats given by a single roll 
 // (e.g.)
@@ -263,47 +363,71 @@ function calculateMatchingStat(statLine, desiredStat){
 //
 // output: true / false
 function ifRollPassDesiredNum(desiredStat,desiredNum, listOfRolledStat){
-    console.log(listOfRolledStat);
+    let cumulativeStat = 0;
+    for( let i = 0; i < listOfRolledStat.length; i++){
+        temp = testString(desiredStat,listOfRolledStat[i]);
+        cumulativeStat += parseInt(temp);
+        // TESTING CODE IF MATCHING IS WRONG
+        // console.log("desiredStat: "+ desiredStat + " / " + listOfRolledStat[i] + " result: " + temp);
+    }
+    // console.log(cumulativeStat);
+    if(cumulativeStat >= desiredNum){
+        return true;
+    }
+    // if(cumulativeStat >= desiredNum){console.log("success");}
 }
 
-//---------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------------
 
+function checkQueryValidity(typeOfEquip,stat,desiredNum,numOfTry,res){
+    let isValid = true;
+
+    if(!equip_list.includes(typeOfEquip)){res.status(403).json({code:403, message:"equip doesn't exist, please double check your query",supported_equip : equip_list}); isValid = false}
+    else if(desiredNum <= 0 || desiredNum > 36){res.status(403).json({code:403, message:"disired stat either too high or too low" }); isValid = false}
+    else if(numOfTry < 100 || numOfTry > 100000){res.status(403).json({code:403, message:"too many tries" }); isValid = false}
+    else if(!supportedStat.includes(stat)){res.status(403).json({code:403, message:"stat doesn't exist, please double check your query",supported_stat : supportedStat}); isValid = false}
+    return isValid;
+}
 
 
 function main(typeOfEquip,stat,desiredNum,numOfTry,res){
-    let isValid = true;
-    if(!equip_list.includes(typeOfEquip)){res.statusCode = 401; res.send('Wrong equip input'); isValid = false}
-    else if(desiredNum <= 0 || desiredNum > 36){res.statusCode = 401; res.send('Wrong num input'); isValid = false}
-    else if(numOfTry < 100 || numOfTry > 100000){res.statusCode = 401; res.send('Wrong numOfTry input'); isValid = false}
+    let isValid = checkQueryValidity(typeOfEquip,stat,desiredNum,numOfTry,res);
+    let numOfSuccess = 0
 
+   
     if(isValid){
+
         for(let i = 0; i < numOfTry; i++){
             let listOfRolledStat = [runOnce(typeOfEquip,100),runOnce(typeOfEquip,1),runOnce(typeOfEquip,1),
                                     runOnce(typeOfEquip,10),runOnce(typeOfEquip,1),runOnce(typeOfEquip,1)];
-            ifRollPassDesiredNum(stat,30,listOfRolledStat);
+            if(ifRollPassDesiredNum(stat,desiredNum,listOfRolledStat)){
+                numOfSuccess += 1;
+            }
+
         }
     }
+    
+    const returnObj = {
+        desiredStatRet: stat,
+        desiredNumRet: desiredNum,
+        numOfTryRet: numOfTry,
+        numOfSuccessRet: numOfSuccess,
+        successRateRet: (numOfSuccess/numOfTry*100).toFixed(2).toString(),
+        avgCubeNeeded: (1/(numOfSuccess/numOfTry)).toFixed(2).toString()
+    };
+
+    console.log("Desired Stat: " + stat + " " + desiredNum + 
+        "\nNumber of rolls: " + numOfTry.toString() + 
+    "\nSuccess roll: " + numOfSuccess.toString() + " \nRate: " + 
+    (numOfSuccess/numOfTry*100).toFixed(2).toString() + "%" +
+    "\nAverage Violet Cube(s) needed: " + (1/(numOfSuccess/numOfTry)).toFixed(2).toString());
+
+    return returnObj;
 }
 
 // console.log(runOnce("glove", 100));
-
-
-main("glove","dex",30,100, "any");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// main("top", "hp", 30, 10000, "any");
+// console.log(testString("ATT", "Magic ATT: +9%"));
 
 
 
