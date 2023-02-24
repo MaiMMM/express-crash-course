@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
 
 
 //**************************************************************************
-var equip_list = ["glove","top", "buttom","ring","hat","shoe","face","eye","weapon","badge","emblem","belt","earring","heart","pendant","secondary","shoulder","cape"]
+var equip_list = ["glove","top", "bottom","ring","hat","shoe","face","eye","weapon","badge","emblem","belt","earring","heart","pendant","secondary","shoulder","cape"]
 const supportedStat = ["DEX","INT","LUK","STR","allStat","HP","critialDamage","coolDown","ATT","MATT"];
 const DEX = "DEX: +12%"
 const INT = "INT: +12%"
@@ -163,7 +163,7 @@ function prime_random_select(typeOfEquip){
 
     if (str === "hat"){return(pickfromarr(hat_lib,hat_pos))}
     if (str === "top"){return(pickfromarr(top_lib,top_pos))}
-    if (str === "buttom"){return(pickfromarr(bottom_lib,bottom_pos))}
+    if (str === "bottom"){return(pickfromarr(bottom_lib,bottom_pos))}
     if (str === "glove"){return(pickfromarr(glove_lib,glove_pos))}
     if (str === "shoe"){return(pickfromarr(shoe_lib,shoe_pos))}
     if (str === "belt" || str === "cape" || str === "shoulder"){return(pickfromarr(cape_belt_shoulder_lib,cape_belt_shoulder_pos))}
@@ -215,7 +215,7 @@ function unprime_random_select(typeOfEquip){
 
     if (str === "hat"){return(pickfromarr(hat_lib,hat_pos))}
     if (str === "top"){return(pickfromarr(top_lib,top_pos))}
-    if (str === "buttom"){return(pickfromarr(bottom_lib,bottom_pos))}
+    if (str === "bottom"){return(pickfromarr(bottom_lib,bottom_pos))}
     if (str === "glove"){return(pickfromarr(glove_lib,glove_pos))}
     if (str === "shoe"){return(pickfromarr(shoe_lib,shoe_pos))}
     if (str === "belt" || str === "cape" || str === "shoulder"){return(pickfromarr(cape_belt_shoulder_lib,cape_belt_shoulder_pos))}
