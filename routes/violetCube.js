@@ -81,7 +81,7 @@ const IED30 = "Ignore Enemy DEF: +30%"
 router
   .route("/:id")
   .get((req, res) => {
-    // console.log(req.user)
+    console.log(req.user)
     var type = req.query.type; var stat = req.query.stat; var num = req.query.num; var numOfTry = req.query.numOfTry;
 
     console.log(type)
@@ -367,14 +367,24 @@ function testString(desiredStat, rolledStat){
 // output: true / false
 function ifRollPassDesiredNum(desiredStat,desiredNum, listOfRolledStat){
     let cumulativeStat = 0;
+    let listOfPassedStat = [];
     for( let i = 0; i < listOfRolledStat.length; i++){
         temp = testString(desiredStat,listOfRolledStat[i]);
-        cumulativeStat += parseInt(temp);
+        listOfPassedStat.push(parseFloat(temp));
         // TESTING CODE IF MATCHING IS WRONG
         // console.log("desiredStat: "+ desiredStat + " / " + listOfRolledStat[i] + " result: " + temp);
     }
+
+    listOfPassedStat.sort(function(a, b) {
+        return b - a;
+      });
+
+    cumulativeStat = listOfPassedStat[0] + listOfPassedStat[1] + listOfPassedStat[2];
+
     // console.log(cumulativeStat);
     if(cumulativeStat >= desiredNum){
+        // TESTING
+        // console.log(listOfRolledStat,desiredNum);
         return true;
     }
     // if(cumulativeStat >= desiredNum){console.log("success");}
