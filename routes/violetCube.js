@@ -2,6 +2,7 @@ const { Template } = require("ejs")
 const express = require("express")
 const router = express.Router()
 let hasSent = false;
+let testMode = false;
 // router.use(logger)
 // http://localhost:3001/violetCube/id?type=glove&stat=CRIT&num=36&numOfTry=10000
 // **************************************************************************
@@ -81,9 +82,10 @@ const IED30 = "Ignore Enemy DEF: +30%"
 router
   .route("/:id")
   .get((req, res) => {
-    console.log(req.user)
-    var type = req.query.type; var stat = req.query.stat; var num = req.query.num; var numOfTry = req.query.numOfTry;
+    // console.log(req.user)
+    var type = req.query.type; var stat = req.query.stat; var num = req.query.num; var numOfTry = req.query.numOfTry; testMode = req.query.testMode;
 
+    console.log(testMode)
     console.log(type)
     console.log(stat)
     console.log(num)
@@ -372,7 +374,9 @@ function ifRollPassDesiredNum(desiredStat,desiredNum, listOfRolledStat){
         temp = testString(desiredStat,listOfRolledStat[i]);
         listOfPassedStat.push(parseFloat(temp));
         // TESTING CODE IF MATCHING IS WRONG
-        // console.log("desiredStat: "+ desiredStat + " / " + listOfRolledStat[i] + " result: " + temp);
+        // if(testMode){
+        //     console.log("desiredStat: "+ desiredStat + " / " + listOfRolledStat[i] + " result: " + temp);
+        // }
     }
 
     listOfPassedStat.sort(function(a, b) {
@@ -384,7 +388,9 @@ function ifRollPassDesiredNum(desiredStat,desiredNum, listOfRolledStat){
     // console.log(cumulativeStat);
     if(cumulativeStat >= desiredNum){
         // TESTING
-        // console.log(listOfRolledStat,desiredNum);
+        if(testMode){
+            console.log("listOfRolledStat: " + listOfRolledStat + "\nrolledNumber: " + cumulativeStat +  "\n" + "desiredNumer: "+ desiredNum + "\n");
+        }   
         return true;
     }
     // if(cumulativeStat >= desiredNum){console.log("success");}
