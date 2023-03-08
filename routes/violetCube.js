@@ -14,7 +14,7 @@ router.get("/", (req, res) => {
 
 //**************************************************************************
 var equip_list = ["glove","top", "bottom","ring","hat","shoe","face","eye","weapon","badge","emblem","belt","earring","heart","pendant","secondary","shoulder","cape"]
-const supportedStat = ["DEX","INT","LUK","STR","allStat","HP","critialDamage","coolDown","ATT","MATT"];
+const supportedStat = ["DEX","INT","LUK","STR","allStat","HP","criticalDamage","coolDown","ATT","MATT"];
 const DEX = "DEX: +12%"
 const INT = "INT: +12%"
 const LUK = "LUK: +12%"

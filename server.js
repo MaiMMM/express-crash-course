@@ -19,5 +19,8 @@ app.set("view engine", "ejs")
 const violetCubeRouter = require("./routes/violetCube")
 app.use("/violetCube", violetCubeRouter)
 
+//nasa router
+const nasaRouter = require("./routes/nasa")
+app.use("/nasa", nasaRouter)
 
 app.listen(8081)
