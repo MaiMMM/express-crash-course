@@ -4,6 +4,13 @@
 // npm run devStart
 const express = require("express")
 const app = express()
+const mongoose = require("mongoose")
+
+//connect to mongodb
+const dbUrl = 'mongodb+srv://chris:sQD3FwjnYc7ldF0f@cluster0.d9kbh3a.mongodb.net/?retryWrites=true&w=majority'
+mongoose.connect(dbUrl)
+    .then((result) => console.log("connected to db"))
+    .catch((err)=>console.log(err))
 
 app.use(express.static("public"))
 app.use(express.urlencoded({ extended: true }))
