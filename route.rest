@@ -1,0 +1,15 @@
+GET http://localhost:8081/nasa
+
+###
+GET http://localhost:8081/nasa/id?index=1&index=2&index=3&acceptAllData=false
+###
+GET http://localhost:8081/subscribers/641b4df4b4741c5dfeb05907
+###
+
+POST http://localhost:8081/subscribers
+Content-Type: application/json
+
+{
+    "name":"Amazing Person",
+    "subscribedToChannel": "WebDevSimplified"
+} 

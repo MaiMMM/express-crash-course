@@ -7,6 +7,7 @@ const router = express.Router()
 let hasSent = false;
 let testMode = false;
 var nasaData = require('./data.json')
+const nasa = require('../models/nasa')
 
 // **************************************************************************
 // get request
@@ -16,10 +17,16 @@ var nasaData = require('./data.json')
 // 3. wantedData (array of string)
 // 4. testMode (true or false)
 
-router.get("/", (req, res) => {
+router.get("/",async (req, res) => {
   // res.setHeader('Content-Type', 'application/json');
   // if(!hasSent){res.send(response);}
-    res.send("Welcome to GitMaster NASA API, if you see this message, it means there is no queries entered")
+  // res.send("Welcome to GitMaster NASA API, if you see this message, it means there is no queries entered")
+  try{
+    const nasaAll = await nasa.find()
+    res.json(nasaAll)
+  }catch(err) {
+      res.status(500).json({message:err.message})
+  }
 })
 
 
@@ -32,6 +39,11 @@ router
     var acceptAllData = req.query.acceptAllData; 
     var wantedData = req.query.wantedData;
     testMode = req.query.testMode;
+
+    console.log(index);
+    console.log(acceptAllData)
+    console.log(wantedData)
+    console.log(testMode)
     // console.log (index,acceptAllData,wantedData,testMode);
     
     //run main
@@ -48,7 +60,6 @@ function filterData(allowed, singleObj){
       ([key, val])=>allowed.includes(key)
     )
   );
-
   return filtered;
 }
 
