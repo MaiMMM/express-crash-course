@@ -2,13 +2,13 @@ const mongoose = require('mongoose')
 
 const nasaSchema = new mongoose.Schema({
     "": {
-        "type": "Number"
+        "type": "String"
       },
       "lon": {
-        "type": "Number"
+        "type": "String"
       },
       "lat": {
-        "type": "Number"
+        "type": "String"
       },
       "time": {
         "type": "Date"

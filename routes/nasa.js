@@ -32,26 +32,20 @@ router.get("/",async (req, res) => {
 
 router
   .route("/:id")
-  .get((req, res) => {
-    console.log("nasa used")
-    // get query
-    var index = req.query.index; 
-    var acceptAllData = req.query.acceptAllData; 
-    var wantedData = req.query.wantedData;
-    testMode = req.query.testMode;
+  .get(async (req, res) => {
 
-    console.log(index);
-    console.log(acceptAllData)
-    console.log(wantedData)
-    console.log(testMode)
+    // get query
+    var index = req.query.index; var acceptAllData = req.query.acceptAllData; var wantedData = req.query.wantedData; testMode = req.query.testMode;
     // console.log (index,acceptAllData,wantedData,testMode);
     
     //run main
-    let response = main(index, acceptAllData, wantedData, testMode); //main function
+    let response = await main(index, acceptAllData, wantedData, testMode); //main function
+    console.log(response)
 
     //send back info
-    if(!hasSent){res.send(response);}
+    res.json(response);
   })
+
 
 
 function filterData(allowed, singleObj){
@@ -64,47 +58,38 @@ function filterData(allowed, singleObj){
 }
 
 
-function main(index, acceptAllData, wantedData, testMode){
-  var nasaData = require('./data.json')
-  indexedData = [];
 
-  for(let i = 0; i < index.length; i++){
-    let allowed = wantedData;
 
-    if(acceptAllData === 'true'){
-      indexedData.push(nasaData[i]);
-      console.log('here');
-    }else{
-      indexedData.push(filterData(allowed,nasaData[i]));
-    }
+
+async function main(index, acceptAllData, wantedData, testMode){
+  // var nasaData = require('./data.json')
+
+  console.log(index);
+
+  let indexedData;  
+  try{
+    indexedData = await nasa.find({"":index}).exec()
+    return indexedData;
+  }catch(err){
+    return err.message;
   }
 
+  
+  // for(let i = 0; i < index.length; i++){
+  //   let allowed = wantedData;
 
+  //   if(acceptAllData === 'true'){
+  //     indexedData.push(nasaData[i]);
+  //     console.log('here');
+  //   }else{
+  //     indexedData.push(filterData(allowed,nasaData[i]));
+  //   }
+  // }
 
-  return indexedData;
 }
 
 
-//   .put((req, res) => {
-//     res.send(`Update User With ID ${req.params.id}`)
-//   })
-//   .delete((req, res) => {
-//     res.send(`Delete User With ID ${req.params.id}`)
-//   })
-// // **************************************************************************
-// // param key word
-// // whenever you go to a "id" url, run this function
-// // param is a middleware, you have to call next() to continue the call. If user type in localhost:3000/user/2 
-// // this middleware will first be ran, then run the get method at line 31 above
-// const users = [{ name: "Kyle" }, { name: "Sally" }]
-// router.param("id", (req, res, next, id) => {
-//   req.user = users[id]
-//   next()
-// })
-// // **************************************************************************
-// function logger(req, res, next) {
-//   console.log(req.originalUrl)
-//   next()
-// }
+
+
 
 module.exports = router
