@@ -33,7 +33,7 @@ router.get("/",async (req, res) => {
 router
   .route("/:id")
   .get(async (req, res) => {
-
+    console.log(req.params['id'])
     // get query
     var index = req.query.index; var acceptAllData = req.query.acceptAllData; var wantedData = req.query.wantedData; testMode = req.query.testMode;
     // console.log (index,acceptAllData,wantedData,testMode);
@@ -74,7 +74,7 @@ async function main(index, acceptAllData, wantedData, testMode){
     return err.message;
   }
 
-  
+
   // for(let i = 0; i < index.length; i++){
   //   let allowed = wantedData;
 

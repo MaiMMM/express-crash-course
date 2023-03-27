@@ -1,15 +1,30 @@
-GET http://localhost:8081/nasa
+GET http://localhost:8081/db/1
 
 ###
-GET http://localhost:8081/nasa/id?index=2
+GET http://localhost:8081/nasa/2
 ###
 GET http://localhost:8081/subscribers/641b4df4b4741c5dfeb05907
 ###
 
-POST http://localhost:8081/subscribers
+POST http://localhost:8081/db
 Content-Type: application/json
 
 {
-    "name":"Amazing Person",
-    "subscribedToChannel": "WebDevSimplified"
+    "lon":"-122.4194",
+    "lat":"37.7749"
 } 
+
+###
+POST http://localhost:8081/nasa
+
+###
+PATCH http://localhost:8081/db/8
+Content-Type: application/json
+
+{
+    "lon":"-122.4194",
+    "lat":"37.7749"
+}
+
+###
+DELETE http://localhost:8081/db/2

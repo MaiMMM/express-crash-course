@@ -43,4 +43,8 @@ app.use("/violetCube", violetCubeRouter)
 const nasaRouter = require("./routes/nasa")
 app.use("/nasa", nasaRouter)
 
+//db router
+const dbRouter = require("./routes/db")
+app.use("/db", dbRouter)
+
 app.listen(8081)
